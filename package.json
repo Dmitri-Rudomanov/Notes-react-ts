@@ -1,6 +1,6 @@
 {
-  "name": "nightly-notes-react",
-  "homepage": "https://zakariyaq313.github.io/nightly-notes-react/",
+  "name": "dark-notes-react",
+  "homepage": "",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -25,7 +25,7 @@
   "scripts": {
     "start": "react-scripts start",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "netlify deploy -p",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
