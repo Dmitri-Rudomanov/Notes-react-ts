@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { noteActions, RootState, useThunkDispatch } from "../../store/store";
 import { exitNoteDialog } from "../../store/action-creators/action-creators";
 import { NoteType } from "../../types/types";
-
+import PageHeader from "../UIComponents/PageHeader";
+import SavedNote from "../SavedNote/SavedNote";
+import NoteDialog from "../NoteDialog/NoteDialog";
+import ConfirmDelete from "../UIComponents/ConfirmDelete";
+import "../../sass/base-component/base-component.scss";
 
 type Props = {
     activePage: string,
@@ -83,8 +87,63 @@ function BaseComponent(props: Props): JSX.Element {
 	}, [isNoteDialogVisible, noteTheme]);
 
     return (
-        <Fragment>
+       <Fragment>
+			<PageHeader pageTitle={pageTitle}
+				activePage={activePage}
+				notesUnavailable={notesUnavailable}
+				onShowDeleteConfirm={showDeleteConfirm}
+				onSyncDeleteAmount={syncDeleteAmount}
+			/>
 
-        </Fragment>
+			<div className={`overlay ${overlayClasses}`} onClick={closeNoteDialog}></div>
+			<div className={`background-blur ${blurOverlayClasses}`}></div>
+
+			<NoteDialog activePage={activePage}
+				onShowDeleteConfirm={showDeleteConfirm}
+				onSyncDeleteAmount={syncDeleteAmount}
+			/>
+
+			{!notesUnavailable && (
+				<div className="notes">
+					{notes.map((note) => (
+						<SavedNote key={note.id}
+							id={note.id}
+							title={note.title}
+							text={note.text}
+							images={note.images}
+							theme={note.theme}
+							font={note.font}
+							isFavourite={note.isFavourite}
+						/>
+					))}
+				</div>
+			)}
+
+			{notesUnavailable && (
+				<div className="notes-unavailable">
+					<span className={notesUnavailableClass}>
+						{notesUnavailableIcon}
+						
+						{activePage === "home" && (
+							<h2 className="clickable" onClick={showNoteDialog}>
+								{notesUnavailableInfo}
+							</h2>
+						)}
+
+						{activePage !== "home" && (
+							<h2>{notesUnavailableInfo}</h2>
+						)}
+					</span>
+				</div>
+			)}
+
+			{activePage === "trash" && (
+				<ConfirmDelete deleteConfirmVisible={deleteConfirmVisible}
+					deleteAmount={deleteAmount}
+					onShowDeleteConfirm={showDeleteConfirm}
+				/>
+			)}
+		</Fragment>
     )
 }
+export default BaseComponent;
